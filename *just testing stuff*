@@ -1,0 +1,64 @@
+#Integration
+from tools import SequenceAligner, MotifFinder
+from sequence import MitochondrialDNA
+
+class GenomicComparator:
+    def __init__(self, sequences: list[MitochondrialDNA]):
+        self.sequences = sequences
+        self.aligner = SequenceAligner()
+        self.motif_finder = MotifFinder()
+
+    def compare_sequences(self, index1: int, index2: int, method='global'):
+        seq1 = self.sequences[index1].sequence
+        seq2 = self.sequences[index2].sequence
+        self.aligner.run(seq1, seq2, method=method)
+        return self.aligner.get_alignment_data()
+
+    def conserved_motifs(self, k=5, threshold=2):
+        motif_counts = {}
+        for seq in self.sequences:
+            result = self.motif_finder.run(seq.sequence, k=k, threshold=threshold)
+            for motif, count in result.items():
+                if motif not in motif_counts:
+                    motif_counts[motif] = 1
+                else:
+                    motif_counts[motif] += 1
+        conserved = {m: c for m, c in motif_counts.items() if c == len(self.sequences)}
+        return conserved
+
+    def multi_alignment_scores(self):
+        results = []
+        for i in range(len(self.sequences)):
+            for j in range(i + 1, len(self.sequences)):
+                data = self.compare_sequences(i, j)
+                results.append({
+                    'pair': (i, j),
+                    'score': data['score'],
+                    'matches': data['match_count'],
+                    'mismatches': data['mismatch_count'],
+                    'gaps': data['gap_count']
+                })
+        return results
+
+from tools import Parser
+from sequence import MitochondrialDNA
+from integration import GenomicComparator
+
+parser = Parser()
+df = parser.run("synthetic_mtDNA_dataset.fasta")
+mt_list = [MitochondrialDNA(df.loc[i]) for i in range(5)]  # Use first 5 for example
+
+comp = GenomicComparator(mt_list)
+
+# Compare first two sequences
+alignment = comp.compare_sequences(0, 1)
+print(f"Alignment Score: {alignment['score']}")
+
+# Identify conserved motifs of length 5
+motifs = comp.conserved_motifs(k=5, threshold=2)
+print("Conserved motifs:", motifs)
+
+# Multi-sequence alignment scores
+summary = comp.multi_alignment_scores()
+for result in summary:
+    print(result)
