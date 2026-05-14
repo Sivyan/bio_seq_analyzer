@@ -223,6 +223,7 @@ if __name__ == '__main__':
 
 from logger import logger
 
-logger.info("UPLOAD filename=test.fasta")
-logger.info("ALIGNMENT type=global score=91")
-logger.error("PARSE_ERROR line=44")
+@app.route("/upload", methods=["POST"])
+def upload():
+
+    logger.info("UPLOAD filename=sample.fasta")
