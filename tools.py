@@ -419,3 +419,16 @@ class MotifFinder(Tool):
                 print(f"\t\tCount: {result['count']}")
                 print(f"\t\tPositions: {', '.join(map(str, result['positions']))}")
             print()
+
+from logger import logger
+
+
+class Parser:
+
+    def run(self, filepath):
+
+        logger.info(f"PARSING file={filepath}")
+
+        # parsing logic
+
+        logger.info("PARSING_COMPLETE sequences=12")
