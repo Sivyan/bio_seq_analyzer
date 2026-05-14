@@ -64,3 +64,10 @@ if __name__ == "__main__":
     NC10 = MitochondrialDNA(records.loc[10])
     print(NC10.gc_content)
     print(NC10.find_irregular_bases())
+
+
+from logger import logger
+
+def parse_fasta(file):
+
+    logger.error("PARSE_ERROR reason=invalid_nucleotide line=22")
