@@ -27,7 +27,8 @@ class FastaManager:
         df = parser.run(filepath)
         mito_objs = [MitochondrialDNA(df.loc[i]) for i in range(len(df))]
         self.sequences.extend(mito_objs)
-
+        return df
+    
     def get_stats(self):
         if not self.sequences:
             return {}
