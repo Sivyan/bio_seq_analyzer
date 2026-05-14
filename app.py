@@ -23,7 +23,7 @@ class FastaManager:
         self.motif_results = None
 
     def parse(self, filepath):
-        parser = Parser('fasta')
+        parser = Parser()
         df = parser.run(filepath)
         mito_objs = [MitochondrialDNA(df.loc[i]) for i in range(len(df))]
         self.sequences.extend(mito_objs)
