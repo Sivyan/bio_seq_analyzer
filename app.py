@@ -219,3 +219,10 @@ def motif_histogram_png():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+from logger import logger
+
+logger.info("UPLOAD filename=test.fasta")
+logger.info("ALIGNMENT type=global score=91")
+logger.error("PARSE_ERROR line=44")
